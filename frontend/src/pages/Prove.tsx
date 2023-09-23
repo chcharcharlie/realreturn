@@ -58,7 +58,7 @@ export default function Prove() {
 
   const startProve = async function (sessionId) {
     waitForProveCallback(sessionId)
-    window.open(`https://jomo.id/prove?flowid=104&publicaccountid=${sessionId}`, 'Jomo', 'resizable,height=800,width=600');
+    window.open(`http://localhost:3000/prove?flowid=106&publicaccountid=${sessionId}`, 'Jomo', 'resizable,height=800,width=600');
   }
 
   // Whenever page loads, run first mount operations

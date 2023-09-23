@@ -10,7 +10,9 @@ const cors = require('cors');
 app.use(cors({ origin: true }));
 
 const { getWalletNonce, getWalletSession } = require('./user');
-const { getLeaderboardData } = require('./leaderboard');
+const { getLeaderboardData, shareToLeaderboard } = require('./leaderboard');
+const { handleJomoCallback } = require('./jomo_callback');
+const { waitForProveSession } = require('./prove');
 
 app.post('/api/fake', (req, res) => {
   console.log(req.body);
@@ -35,6 +37,30 @@ app.post('/api/get_wallet_nonce', (req, res) => {
 
 app.post('/api/get_wallet_session', (req, res) => {
   getWalletSession(req, res).then((response) => {
+    if (response) {
+      res.json(response);
+    }
+  });
+});
+
+app.post('/api/jomo_callback', (req, res) => {
+  handleJomoCallback(req, res).then((response) => {
+    if (response) {
+      res.json(response);
+    }
+  });
+});
+
+app.post('/api/get_session_result', (req, res) => {
+  waitForProveSession(req, res).then((response) => {
+    if (response) {
+      res.json(response);
+    }
+  });
+});
+
+app.post('/api/share_to_leaderboard', (req, res) => {
+  shareToLeaderboard(req, res).then((response) => {
     if (response) {
       res.json(response);
     }

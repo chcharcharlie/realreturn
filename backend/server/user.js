@@ -53,20 +53,15 @@ async function getWalletSession(req, res) {
   }
 
   // Delete used nonce
-  deleteData('nonces/' + chainId + '/' + walletAddress + '/')
+  deleteData('wallet_nonces/' + chainId + '/' + walletAddress + '/')
 
-  // Issue or retrieve session for wallet
-  const sessionInfo = await getData('wallet_to_session/' + chainId + '/' + walletAddress + '/');
-  if (!sessionInfo) {
-    const newSession = uuid()
-    await setData('wallet_to_session/' + chainId + '/' + walletAddress + '/', {
-      'session_id': newSession,
-    });
-    return {
-      'session_id': newSession,
-    }
-  } else {
-    return sessionInfo
+  // Issue new session for wallet
+  const newSession = uuid()
+  await setData('wallet_to_session/' + chainId + '/' + walletAddress + '/', {
+    'session_id': newSession,
+  });
+  return {
+    'session_id': newSession,
   }
 }
 
