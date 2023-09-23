@@ -34,11 +34,11 @@ const GREY = {
 };
 
 const PRIMARY = {
-  light: '#7774F5',
-  lighter: "#D2D1FD",
-  main: '#201CE0',
-  dark: '#100EA1',
-  darker: '#06056B',
+  lighter: "#DCFDFA",
+  light: '#95F0F5',
+  main: '#4EC3E0',
+  dark: '#2776A1',
+  darker: '#0E3D6B',
   contrastText: '#FFFFFF',
 };
 
@@ -52,38 +52,38 @@ const SECONDARY = {
 };
 
 const INFO = {
-  lighter: '#CBFBFD',
-  light: '#64DDF8',
-  main: '#02A1EA',
-  dark: '#015DA8',
-  darker: '#002F70',
+  lighter: '#CDF7FE',
+  light: '#6AD6FD',
+  main: '#099DF9',
+  dark: '#045BB3',
+  darker: '#012E77',
   contrastText: '#FFFFFF',
 };
 
 const SUCCESS = {
-  lighter: '#F0FDD3',
-  light: '#C2F57C',
-  main: '#7EE028',
-  dark: '#47A114',
-  darker: '#216B07',
+  lighter: '#ECFBD3',
+  light: '#B3E97A',
+  main: '#60B726',
+  dark: '#328313',
+  darker: '#145707',
   contrastText: '#FFFFFF',
 };
 
 const WARNING = {
-  lighter: '#FFF4CC',
-  light: '#FFD466',
-  main: '#FFA500',
-  dark: '#B76900',
-  darker: '#7A3D00',
-  contrastText: GREY[800],
+  lighter: '#FEF6D0',
+  light: '#FCDB73',
+  main: '#F7B418',
+  dark: '#B1750C',
+  darker: '#764604',
+  contrastText: '#FFFFFF',
 };
 
 const ERROR = {
-  lighter: '#FEE4D1',
-  light: '#FA9875',
-  main: '#EF311C',
-  dark: '#AC0E17',
-  darker: '#72051D',
+  lighter: '#FFE7D6',
+  light: '#FFA683',
+  main: '#FF4A32',
+  dark: '#B7191F',
+  darker: '#7A0920',
   contrastText: '#FFFFFF',
 };
 
@@ -113,17 +113,20 @@ export default function palette(themeMode: 'light' | 'dark') {
     ...COMMON,
     mode: 'light',
     text: {
-      primary: GREY[800],
-      secondary: GREY[600],
-      stockup: SUCCESS.dark,
+      primary: '#FFFFFF',
+      secondary: GREY[500],
+      stockup: SUCCESS.main,
       stockdown: ERROR.main,
-      disabled: GREY[500],
+      disabled: GREY[600],
     },
-    background: { paper: '#FFFFFF', default: '#FFFFFF', neutral: GREY[200] },
-    // background: { default: 'rgb(251, 249, 249)', paper: 'rgb(255, 253, 253)', neutral: GREY[200] },
+    background: {
+      paper: '21212e',
+      default: GREY[900],
+      neutral: alpha(GREY[500], 0.16),
+    },
     action: {
       ...COMMON.action,
-      active: GREY[600],
+      active: GREY[500],
     },
   } as const;
 
@@ -138,7 +141,7 @@ export default function palette(themeMode: 'light' | 'dark') {
       disabled: GREY[600],
     },
     background: {
-      paper: GREY[800],
+      paper: '21212e',
       default: GREY[900],
       neutral: alpha(GREY[500], 0.16),
     },
