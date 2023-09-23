@@ -9,6 +9,7 @@ const cors = require('cors');
 // Automatically allow cross-origin requests
 app.use(cors({ origin: true }));
 
+const { getWalletNonce, getWalletSession } = require('./user');
 const { getLeaderboardData } = require('./leaderboard');
 
 app.post('/api/fake', (req, res) => {
@@ -18,6 +19,22 @@ app.post('/api/fake', (req, res) => {
 
 app.post('/api/get_leaderboard_data', (req, res) => {
   getLeaderboardData(req, res).then((response) => {
+    if (response) {
+      res.json(response);
+    }
+  });
+});
+
+app.post('/api/get_wallet_nonce', (req, res) => {
+  getWalletNonce(req, res).then((response) => {
+    if (response) {
+      res.json(response);
+    }
+  });
+});
+
+app.post('/api/get_wallet_session', (req, res) => {
+  getWalletSession(req, res).then((response) => {
     if (response) {
       res.json(response);
     }

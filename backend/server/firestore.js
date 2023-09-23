@@ -1,10 +1,4 @@
-const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
-
-const serviceAccount = require('../realreturn-firebase-adminsdk.json')
-initializeApp({
-  credential: cert(serviceAccount)
-});
 
 const db = getFirestore();
 
