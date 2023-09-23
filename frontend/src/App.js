@@ -5,6 +5,8 @@ import ThemeProvider from './theme';
 import { useState } from "react";
 import SnackbarProvider from './components/snackbar';
 import { MotionLazyContainer } from './components/animate';
+import NavBar from './pages/NavBar';
+import Home from './pages/Home';
 import Page404 from './pages/Page404';
 
 function App() {
@@ -18,7 +20,9 @@ function App() {
         <BrowserRouter>
           <SnackbarProvider>
             <UserContext.Provider value={{ page, setPage, user, setUser, session, setSession }}>
+              {page && page !== "404" && <NavBar />}
               <Routes>
+                <Route path='' element={<Home />} />
                 <Route path='*' element={<Page404 />} />
               </Routes>
               {page && page !== "404" && <div className="footer">Built with ❤️ in California</div>}
