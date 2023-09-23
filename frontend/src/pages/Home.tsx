@@ -50,7 +50,7 @@ export default function Home() {
         <Stack gap={0.5} alignItems={"center"}>
           <Stack direction={"row"} alignItems={"center"} gap={1}>
             <Iconify height={28} width={28} icon="ic:round-leaderboard" />
-            <Typography variant='h5'>Attested Investment Returns</Typography>
+            <Typography variant='h5'>Real Investment Returns</Typography>
           </Stack>
           <Button onClick={() => { window.location.href = "/prove" }}>Join the Leaderboard</Button>
         </Stack>

@@ -94,7 +94,7 @@ function ConnectWallet({ chainId, onWalletConnected, sx = {}, disabled = false, 
       projectId: projectId, // REQUIRED your projectId
       chains: [1], // REQUIRED chain ids
       showQrModal: true, // REQUIRED set to "true" to use @walletconnect/modal
-      methods: [], // REQUIRED ethereum methods
+      methods: ['personal_sign'], // REQUIRED ethereum methods
       optionalMethods: ['personal_sign'],
       events: [], // REQUIRED ethereum events
     })

@@ -27,7 +27,7 @@ function App() {
                 <Route path='/prove' element={<Prove />} />
                 <Route path='*' element={<Page404 />} />
               </Routes>
-              {page && page !== "404" && <div className="footer">Only Real Return Counts</div>}
+              {page && page !== "404" && <div className="footer">Only Real Returns Count</div>}
             </UserContext.Provider>
           </SnackbarProvider>
         </BrowserRouter>
