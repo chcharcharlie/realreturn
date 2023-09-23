@@ -1,7 +1,11 @@
-const { initializeApp } = require('firebase-admin/app');
+const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 
-initializeApp();
+const serviceAccount = require('../realreturn-firebase-adminsdk.json')
+initializeApp({
+  credential: cert(serviceAccount)
+});
+
 const db = getFirestore();
 
 async function getInvestmentReturnRecords(time_span, gain_or_loss, max_records) {
