@@ -7,7 +7,6 @@ import { alpha, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { Link } from 'react-router-dom'
 import logoImg from '../images/logo.png';
-import Label from '../components/label/Label';
 
 function ElevationScroll(props) {
     const { children } = props;
@@ -25,10 +24,6 @@ function ElevationScroll(props) {
     });
 }
 
-// const menus = [
-//     { text: 'Activities', href: '/activities' },
-// ];
-
 export default function NavBar() {
     const theme = useTheme()
 
@@ -39,7 +34,7 @@ export default function NavBar() {
                 <AppBar sx={{
                     backgroundColor: alpha(theme.palette.background.default, 0.75),
                     borderBottom: "1px solid #333333",
-                    backdropFilter: "blur(6px)",
+                    backdropFilter: "blur(5px)",
                     zIndex: 69,
                 }}>
                     <Toolbar>

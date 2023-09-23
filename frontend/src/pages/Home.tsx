@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 // @mui
-import { ToggleButtonGroup, ToggleButton, Typography, Stack, Tooltip, CircularProgress } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, Typography, Stack, Tooltip, CircularProgress, Button } from '@mui/material';
 import { CustomAvatarGroup, CustomAvatar } from '../components/custom-avatar';
 
 // @ts-ignore
@@ -42,8 +42,11 @@ export default function Home() {
 
   return (
     <>
-      <Stack marginTop={"25px"} alignItems={"center"} gap={2} minWidth={"540px"} marginX={"15px"}>
-        <Typography variant='h5'>Attested Investment Return Leaderboard</Typography>
+      <Stack marginTop={"35px"} alignItems={"center"} gap={2} minWidth={"540px"} marginX={"15px"}>
+        <Stack gap={0.5}>
+          <Typography variant='h5'>Attested Investment Return Leaderboard</Typography>
+          <Button onClick={() => { window.location.href = "/prove" }}>Join the Leaderboard</Button>
+        </Stack>
         <Stack direction={"row"} justifyContent={"space-evenly"} width={1}>
           <ToggleButtonGroup
             color="primary"
@@ -80,8 +83,11 @@ export default function Home() {
             <CircularProgress size={24} color="primary" />
           </Stack>
         }
+        {loaded && data.length === 0 &&
+          <Typography>No records yet</Typography>
+        }
         {loaded &&
-          <Stack width={"500px"} gap={0.5}>
+          <Stack width={"540px"} gap={0.5}>
             {data.map((record, idx) =>
               <Stack key={idx} direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={1}>
                 <Stack direction={"row"} gap={2} alignItems={"center"}>
@@ -116,6 +122,7 @@ export default function Home() {
             )}
           </Stack>
         }
+        <Button variant='contained' onClick={() => { window.location.href = "/prove" }}>Join the Leaderboard</Button>
       </Stack >
     </>
   );
