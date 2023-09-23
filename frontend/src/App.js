@@ -7,6 +7,7 @@ import SnackbarProvider from './components/snackbar';
 import { MotionLazyContainer } from './components/animate';
 import NavBar from './pages/NavBar';
 import Home from './pages/Home';
+import Prove from './pages/Prove';
 import Page404 from './pages/Page404';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               {page && page !== "404" && <NavBar />}
               <Routes>
                 <Route path='' element={<Home />} />
+                <Route path='/prove' element={<Prove />} />
                 <Route path='*' element={<Page404 />} />
               </Routes>
               {page && page !== "404" && <div className="footer">Only Real Return Counts</div>}

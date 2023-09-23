@@ -1,6 +1,9 @@
 import { useEffect, useState, useRef } from 'react'
+
 // @mui
 import { ToggleButtonGroup, ToggleButton, Typography, Stack, Tooltip, CircularProgress, Button } from '@mui/material';
+
+// Components
 import { CustomAvatarGroup, CustomAvatar } from '../components/custom-avatar';
 import Iconify from '../components/iconify';
 
@@ -31,7 +34,7 @@ export default function Home() {
     setLoaded(true)
   }
 
-  // Whenever page loads, load locally stored data
+  // Whenever page loads, run first mount operations
   useEffect(() => {
     setPage("Home")
     if (isFirstMount.current) {
@@ -44,7 +47,7 @@ export default function Home() {
   return (
     <>
       <Stack marginTop={"35px"} alignItems={"center"} gap={2} minWidth={"540px"} marginX={"15px"}>
-        <Stack gap={0.5}>
+        <Stack gap={0.5} alignItems={"center"}>
           <Stack direction={"row"} alignItems={"center"} gap={1}>
             <Iconify height={28} width={28} icon="ic:round-leaderboard" />
             <Typography variant='h5'>Attested Investment Returns</Typography>
