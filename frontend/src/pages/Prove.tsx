@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 
 // @mui
-import { ToggleButtonGroup, ToggleButton, Typography, Stack, Tooltip, CircularProgress, Button, IconButton, Box } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, Typography, Stack, Tooltip, CircularProgress, Button, IconButton, Box, Collapse } from '@mui/material';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 
@@ -11,6 +11,7 @@ import Iconify from '../components/iconify';
 
 // @ts-ignore
 import { useUserContext } from '../context/UserContext.tsx';
+import ConnectWallet from './ConnectWallet'
 import * as apirequests from '../utils/apirequests'
 import robinhoodImg from '../images/robinhood.png'
 import jomoImg from '../images/jomo.png'
@@ -32,6 +33,10 @@ export default function Prove() {
   const { setPage } = useUserContext()
   const theme = useTheme()
   const isFirstMount = useRef(true)
+
+  const [accountType, setAccountType] = useState(null)
+  const [account, setAccount] = useState(null)
+  const [proveSession, setProveSession] = useState(null)
 
   // Whenever page loads, run first mount operations
   useEffect(() => {
@@ -56,51 +61,76 @@ export default function Prove() {
           <Stack gap={2}>
             <Stack direction={"row"} gap={2} alignItems={"center"}>
               <Stack minHeight={36} minWidth={36} borderRadius={5} border={"1px solid"} alignItems={"center"} justifyContent={"center"}>
-                <Iconify height={20} width={20} icon="ri:number-1" />
+                {account &&
+                  <Iconify height={36} width={36} icon="material-symbols:check" />
+                }
+                {!account &&
+                  <Iconify height={20} width={20} icon="ri:number-1" />
+                }
               </Stack>
               <Typography variant="body1" textAlign="left">
                 Log in to RealReturn
               </Typography>
             </Stack>
-            <Stack gap={1} alignItems={"center"} paddingLeft={1}>
-              <Stack direction={"row"} justifyContent={"start"} alignItems={"center"} gap={2}>
-                <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }}>
-                  <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={ethereumImg} />
-                </IconButton>
-                <Tooltip title="Coming Soon!" placement='top'>
-                  <Box>
-                    <Box
-                      sx={{
-                        backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
-                      }} width={"45px"} height={"45px"} position={"absolute"} />
-                    <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
-                      <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={redditImg} />
-                    </IconButton>
-                  </Box>
-                </Tooltip>
-                <Tooltip title="Coming Soon!" placement='top'>
-                  <Box>
-                    <Box
-                      sx={{
-                        backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
-                      }} width={"45px"} height={"45px"} position={"absolute"} />
-                    <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
-                      <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={twitterxImg} />
-                    </IconButton>
-                  </Box>
-                </Tooltip>
-                <Tooltip title="Coming Soon!" placement='top'>
-                  <Box>
-                    <Box
-                      sx={{
-                        backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
-                      }} width={"45px"} height={"45px"} position={"absolute"} />
-                    <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
-                      <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={googleImg} />
-                    </IconButton>
-                  </Box>
-                </Tooltip>
-              </Stack>
+            <Stack gap={0} alignItems={"center"} paddingLeft={2}>
+              <Collapse in={account && true}>
+                <Stack direction={"row"} justifyContent={"start"} alignItems={"center"} gap={1}>
+                  {accountType && accountType === "evm" &&
+                    <CustomAvatar sx={{ width: "30px", height: "30px" }} alt="EVM wallet" src={ethereumImg} />
+                  }
+                  <Typography>{account}</Typography>
+                </Stack>
+              </Collapse>
+              <Collapse in={!account && true}>
+                <Stack direction={"row"} justifyContent={"start"} alignItems={"center"} gap={2}>
+                  <ConnectWallet
+                    chainId={"evm"}
+                    child={(
+                      <IconButton sx={{ width: "45px", height: "45px" }}>
+                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={ethereumImg} />
+                      </IconButton>
+                    )}
+                    onWalletConnected={(address, session_id) => {
+                      setAccountType("evm")
+                      setAccount(address)
+                      setProveSession(session_id)
+                    }}
+                  />
+                  <Tooltip title="Coming Soon!" placement='top'>
+                    <Box>
+                      <Box
+                        sx={{
+                          backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
+                        }} width={"45px"} height={"45px"} position={"absolute"} />
+                      <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
+                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={redditImg} />
+                      </IconButton>
+                    </Box>
+                  </Tooltip>
+                  <Tooltip title="Coming Soon!" placement='top'>
+                    <Box>
+                      <Box
+                        sx={{
+                          backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
+                        }} width={"45px"} height={"45px"} position={"absolute"} />
+                      <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
+                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={twitterxImg} />
+                      </IconButton>
+                    </Box>
+                  </Tooltip>
+                  <Tooltip title="Coming Soon!" placement='top'>
+                    <Box>
+                      <Box
+                        sx={{
+                          backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
+                        }} width={"45px"} height={"45px"} position={"absolute"} />
+                      <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
+                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={googleImg} />
+                      </IconButton>
+                    </Box>
+                  </Tooltip>
+                </Stack>
+              </Collapse>
             </Stack>
           </Stack>
         </Item >
