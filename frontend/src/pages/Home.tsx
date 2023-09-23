@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <Stack marginTop={"25px"} alignItems={"center"} gap={2} minWidth={"540px"} marginX={"15px"}>
-        <Typography variant='h4'>Verified Investment Return Leaderboard</Typography>
+        <Typography variant='h5'>Attested Investment Return Leaderboard</Typography>
         <Stack direction={"row"} justifyContent={"space-evenly"} width={1}>
           <ToggleButtonGroup
             color="primary"
@@ -44,15 +44,18 @@ export default function Home() {
             exclusive
             onChange={(_, newValue) => { setGainloss(newValue) }}
           >
-            <ToggleButton value="positive" color='success'>Biggest Gain</ToggleButton>
-            <ToggleButton value="negative" color='error'>Biggest Loss</ToggleButton>
+            <ToggleButton value="positive" color='success'>Biggest Gains</ToggleButton>
+            <ToggleButton value="negative" color='error'>Biggest Losses</ToggleButton>
           </ToggleButtonGroup>
         </Stack>
-        <Stack width={"400px"} gap={0.5}>
+        <Stack width={"500px"} gap={0.5}>
           <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={1}>
             <Stack direction={"row"} gap={2} alignItems={"center"}>
               <Typography variant='h6' minWidth={"20px"}>1</Typography>
               <Typography variant='body1' minWidth={"150px"}>0x1234efgh....uiop</Typography>
+            </Stack>
+            <Stack direction={"row"} gap={2} alignItems={"center"}>
+              <Typography variant='h6' color={"success.main"} minWidth={"70px"}>+54.15%</Typography>
               <Tooltip title={"Brokerage ( Robinhood ) - Attested by ( Jomo )"} placement="top">
                 <CustomAvatarGroup size={"tiny"} spacing={"medium"}>
                   <CustomAvatar
@@ -65,25 +68,13 @@ export default function Home() {
                   />
                 </CustomAvatarGroup>
               </Tooltip>
+              <Tooltip title={"Attestation generated based on data from 2023/08/01"} placement="top">
+                <Typography variant='caption' minWidth={"65px"}>2023/08/01</Typography>
+              </Tooltip>
             </Stack>
-            <Typography variant='h6' color={"success.main"}>+54.15%</Typography>
-          </Stack>
-          <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={1}>
-            <Stack direction={"row"} gap={2} alignItems={"center"}>
-              <Typography variant='h6' minWidth={"20px"}>2</Typography>
-              <Typography variant='body1'>0x1234efgh....uiop</Typography>
-            </Stack>
-            <Typography variant='h6'>+52.09%</Typography>
-          </Stack>
-          <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={1}>
-            <Stack direction={"row"} gap={2} alignItems={"center"}>
-              <Typography variant='h6' minWidth={"20px"}>22</Typography>
-              <Typography variant='body1'>0x1234efgh....uiop</Typography>
-            </Stack>
-            <Typography variant='h6'>+45.09%</Typography>
           </Stack>
         </Stack>
-      </Stack>
+      </Stack >
     </>
   );
 }
