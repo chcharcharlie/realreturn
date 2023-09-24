@@ -14,6 +14,9 @@ import robinhoodImg from '../images/robinhood.png'
 import jomoImg from '../images/jomo.png'
 import ethereumImg from '../images/ethereum.png'
 
+import { ethers } from 'ethers';
+const infuraProvider = new ethers.providers.JsonRpcProvider("https://" + process.env.REACT_APP_NETWORK_NAME! + ".infura.io/v3/" + process.env.REACT_APP_INFURA_ID!)
+
 export default function Home() {
   const { setPage } = useUserContext()
   const [timespan, setTimespan] = useState("week")
@@ -22,9 +25,33 @@ export default function Home() {
   const [data, setData] = useState([])
   const isFirstMount = useRef(true)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setFormattedAddresses] = useState<Map<string, string>>(new Map())
+  const address_to_ens = useRef<Map<string, string>>(new Map())
+
+  const obfuscateAddress = (address: string) => {
+    return (address.substring(0, 10) + " ... " + address.substring(34)).toLowerCase()
+  }
+
+  const lookupEns = (address: string) => {
+    if (!address_to_ens.current.has(address)) {
+      address_to_ens.current.set(address, obfuscateAddress(address))
+      setFormattedAddresses(new Map(address_to_ens.current))
+
+      infuraProvider.lookupAddress(address).then((ens_name) => {
+        if (ens_name) {
+          address_to_ens.current.set(address, ens_name)
+          setFormattedAddresses(new Map(address_to_ens.current))
+        }
+      })
+    }
+
+    return address_to_ens.current.get(address)
+  }
+
   const renderAccount = function (account, account_type) {
     if (account_type === "evm") {
-      return account.substring(0, 10) + " ... " + account.substring(34)
+      return lookupEns(account)
     }
     return account
   }
@@ -69,11 +96,9 @@ export default function Home() {
             aria-label="Time Span"
             value={timespan}
             exclusive
-            onChange={(a, newValue) => {
-              if (newValue) {
-                setTimespan(newValue)
-                loadData(newValue, gainloss, 50)
-              }
+            onChange={(_, newValue) => {
+              setTimespan(newValue)
+              loadData(newValue, gainloss, 50)
             }}
           >
             <ToggleButton value="week">Weekly</ToggleButton>
@@ -87,10 +112,8 @@ export default function Home() {
             value={gainloss}
             exclusive
             onChange={(_, newValue) => {
-              if (newValue) {
-                setGainloss(newValue)
-                loadData(timespan, newValue, 50)
-              }
+              setGainloss(newValue)
+              loadData(timespan, newValue, 50)
             }}
           >
             <ToggleButton value="positive" color='success'>Biggest Gains</ToggleButton>
