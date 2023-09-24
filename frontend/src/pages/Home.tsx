@@ -12,6 +12,7 @@ import { useUserContext } from '../context/UserContext.tsx';
 import * as apirequests from '../utils/apirequests'
 import robinhoodImg from '../images/robinhood.png'
 import jomoImg from '../images/jomo.png'
+import ethereumImg from '../images/ethereum.png'
 
 export default function Home() {
   const { setPage } = useUserContext()
@@ -20,6 +21,13 @@ export default function Home() {
   const [loaded, setLoaded] = useState(false)
   const [data, setData] = useState([])
   const isFirstMount = useRef(true)
+
+  const renderAccount = function (account, account_type) {
+    if (account_type === "evm") {
+      return account.substring(0, 10) + " ... " + account.substring(34)
+    }
+    return account
+  }
 
   const loadData = async function (time_span, gain_or_loss, max_records) {
     setLoaded(false)
@@ -99,13 +107,18 @@ export default function Home() {
               <Stack key={idx} direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={1}>
                 <Stack direction={"row"} gap={2} alignItems={"center"}>
                   <Typography variant='h6' minWidth={"20px"}>{idx + 1}</Typography>
-                  <Typography variant='body1' minWidth={"150px"}>{record.user}</Typography>
+                  <Stack direction={"row"} alignItems={"center"} gap={1}>
+                    <CustomAvatar sx={{ width: "20px", height: "20px" }} alt="EVM wallet" src={ethereumImg} />
+                    <Tooltip title={record.account} placement='top'>
+                      <Typography variant='body1' minWidth={"150px"}>{renderAccount(record.account, record.account_type)}</Typography>
+                    </Tooltip>
+                  </Stack>
                 </Stack>
                 <Stack direction={"row"} gap={2} alignItems={"center"}>
                   <Typography variant='h6' color={record.return_number >= 0 ? "success.main" : "error.main"} minWidth={"70px"}>
                     {record.return_number > 0 && "+"}{record.return_number / 100.00}%
                   </Typography>
-                  <Tooltip title={`Brokerage ( ${record.brokerage} ) - Attested by ( ${record.attester} )`} placement="top">
+                  <Tooltip title={`Brokerage ( ${record.brokerage} ) - Proved by ( ${record.attester} )`} placement="top">
                     <CustomAvatarGroup size={"tiny"} spacing={"medium"}>
                       <CustomAvatar
                         alt={record.brokerage}
@@ -121,7 +134,7 @@ export default function Home() {
                       />
                     </CustomAvatarGroup>
                   </Tooltip>
-                  <Tooltip title={`Attestation generated based on data from ${new Date(record.attested_at._seconds * 1000).toLocaleDateString()}`} placement="top">
+                  <Tooltip title={`Proof generated based on data from ${new Date(record.attested_at._seconds * 1000).toLocaleDateString()}`} placement="top">
                     <Typography variant='caption' minWidth={"65px"}>{new Date(record.attested_at._seconds * 1000).toLocaleDateString()}</Typography>
                   </Tooltip>
                 </Stack>
@@ -129,7 +142,7 @@ export default function Home() {
             )}
           </Stack>
         }
-        <Button variant='contained' onClick={() => { window.location.href = "/prove" }}>Join the Leaderboard</Button>
+        <Button sx={{ mt: 2 }} variant='contained' onClick={() => { window.location.href = "/prove" }}>Join the Leaderboard</Button>
       </Stack >
     </>
   );

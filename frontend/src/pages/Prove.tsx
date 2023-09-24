@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 
 // @mui
-import { ToggleButtonGroup, ToggleButton, Typography, Stack, Tooltip, Button, IconButton, Box, Collapse } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, Typography, Stack, Tooltip, Button, IconButton, Box, Collapse, Avatar } from '@mui/material';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 
@@ -39,6 +39,30 @@ export default function Prove() {
   const [proveSession, setProveSession] = useState(null)
   const [proving, setProving] = useState(false)
   const [proved, setProved] = useState(false)
+  const [provedData, setProvedData] = useState(null)
+  const [shareError, setShareError] = useState(null)
+
+  const timespanToStr = {
+    "0": "Weekly",
+    "1": "Monthly",
+    "2": "Yearly",
+  }
+
+  const brokerageToStr = {
+    "0": "Robinhood",
+  }
+
+  const brokerageToImg = {
+    "0": robinhoodImg,
+  }
+
+  const attesterToStr = {
+    "0xae85c77f7318bdd466885d21e0875a40ec3657d2": "Jomo"
+  }
+
+  const attesterToImg = {
+    "0xae85c77f7318bdd466885d21e0875a40ec3657d2": jomoImg
+  }
 
   const waitForProveCallback = async function (sessionId) {
     setProved(false)
@@ -51,14 +75,29 @@ export default function Prove() {
 
     if (jsonData) {
       setProved(true)
-
-      // TODO: Handle data, link it to account and join leaderboard
+      setProvedData(jsonData.result)
     }
   }
 
   const startProve = async function (sessionId) {
     waitForProveCallback(sessionId)
-    window.open(`http://localhost:3000/prove?flowid=106&publicaccountid=${sessionId}`, 'Jomo', 'resizable,height=800,width=600');
+    window.open(`${process.env.REACT_APP_JOMO_URL}/prove?flowid=105&publicaccountid=${sessionId}`, 'Jomo', 'resizable,height=800,width=600');
+  }
+
+  const shareToLeaderboard = async function (sessionId, accountType, account) {
+    const jsonData = await apirequests.backendRequest("share_to_leaderboard", {
+      "session_id": sessionId,
+      "account_type": accountType,
+      "account": account,
+    });
+
+    if (jsonData && jsonData.shared) {
+      window.location.href = "/"
+    } else if (jsonData) {
+      setShareError(jsonData.error)
+    } else {
+      setShareError("Something went wrong.")
+    }
   }
 
   // Whenever page loads, run first mount operations
@@ -126,7 +165,7 @@ export default function Prove() {
                           backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
                         }} width={"45px"} height={"45px"} position={"absolute"} />
                       <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
-                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={redditImg} />
+                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="Reddit" src={redditImg} />
                       </IconButton>
                     </Box>
                   </Tooltip>
@@ -137,7 +176,7 @@ export default function Prove() {
                           backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
                         }} width={"45px"} height={"45px"} position={"absolute"} />
                       <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
-                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={twitterxImg} />
+                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="Twitter" src={twitterxImg} />
                       </IconButton>
                     </Box>
                   </Tooltip>
@@ -148,7 +187,7 @@ export default function Prove() {
                           backgroundColor: alpha(theme.palette.grey[800], 0.7), zIndex: 10
                         }} width={"45px"} height={"45px"} position={"absolute"} />
                       <IconButton sx={{ width: "45px", height: "45px" }} onClick={() => { }} disabled={true}>
-                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="EVM wallet" src={googleImg} />
+                        <CustomAvatar sx={{ width: "40px", height: "40px" }} alt="Gmail" src={googleImg} />
                       </IconButton>
                     </Box>
                   </Tooltip>
@@ -198,6 +237,71 @@ export default function Prove() {
                 )}
               >
                 Prove using Jomo
+              </Button>
+            </Stack>
+            {provedData &&
+              <Stack gap={1} alignItems={"left"} paddingX={5} width={1}>
+                <Stack direction="row" spacing={1} alignItems='center'>
+                  <Avatar alt={brokerageToImg[provedData.result_values[0]]} src={brokerageToImg[provedData.result_values[0]]} sx={{ width: 24, height: 24 }} />
+                  <Typography gutterBottom variant="h6" component="div">
+                    {brokerageToStr[provedData.result_values[0]]}
+                  </Typography>
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems='center' justifyContent={"space-between"}>
+                  <Typography variant="subtitle2">
+                    Unique Id
+                  </Typography>
+                  <Typography variant="body2">{provedData.unique_id}</Typography>
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems='center' justifyContent={"space-between"}>
+                  <Typography variant="subtitle2">
+                    Time Span
+                  </Typography>
+                  <Typography variant="body2">{timespanToStr[provedData.result_values[1]]}</Typography>
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems='center' justifyContent={"space-between"}>
+                  <Typography variant="subtitle2">
+                    Investment Return
+                  </Typography>
+                  <Typography variant="body2" color={(provedData.result_values[2] === "0" && provedData.result_values[3] !== "0") ? "text.stockdown" : "text.stockup"}>
+                    {(provedData.result_values[2] === "0" && provedData.result_values[3] !== "0") ? "Down" : "Up"} {parseFloat(provedData.result_values[2] === "0" ? provedData.result_values[3] : provedData.result_values[2]) / 100.0}%
+                  </Typography>
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems='center' justifyContent={"space-between"}>
+                  <Typography variant="subtitle2">
+                    Proved By
+                  </Typography>
+                  <Stack direction="row" spacing={1} alignItems='center'>
+                    <Avatar alt={attesterToStr[provedData.attester]} src={attesterToImg[provedData.attester]} sx={{ width: 20, height: 20 }} />
+                    <Typography gutterBottom variant="subtitle2">
+                      {attesterToStr[provedData.attester]}
+                    </Typography>
+                  </Stack>
+                </Stack>
+              </Stack>
+            }
+          </Stack>
+        </Item>
+        <Item sx={{ width: 1 }}>
+          <Stack gap={2}>
+            <Stack direction={"row"} gap={2} alignItems={"center"}>
+              <Stack minHeight={36} minWidth={36} borderRadius={5} border={"1px solid"} alignItems={"center"} justifyContent={"center"}>
+                <Iconify height={20} width={20} icon="ri:number-3" />
+              </Stack>
+              <Typography variant="body1" textAlign="left">
+                Share to leaderboard
+              </Typography>
+            </Stack>
+            <Stack gap={2} alignItems={"center"}>
+              {shareError &&
+                <Typography variant='body1'>{shareError}</Typography>
+              }
+              <Button
+                variant='contained'
+                disabled={!proved}
+                onClick={() => { shareToLeaderboard(provedData.session_id, accountType, account) }}
+              >
+                Share on RealReturn
               </Button>
             </Stack>
           </Stack>
