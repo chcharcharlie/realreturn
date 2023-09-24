@@ -71,11 +71,13 @@ export default function Prove() {
     const jsonData = await apirequests.backendRequest("get_session_result", {
       "session_id": sessionId,
     });
-    setProving(false)
 
     if (jsonData) {
+      setProving(false)
       setProved(true)
       setProvedData(jsonData.result)
+    } else {
+      waitForProveCallback(sessionId)
     }
   }
 

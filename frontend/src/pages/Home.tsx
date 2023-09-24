@@ -62,16 +62,18 @@ export default function Home() {
           </Stack>
           <Button onClick={() => { window.location.href = "/prove" }}>Join the Leaderboard</Button>
         </Stack>
-        <Stack direction={"row"} justifyContent={"space-evenly"} width={1}>
+        <Stack direction={"row"} justifyContent={"space-between"} maxWidth={"600px"} width={1}>
           <ToggleButtonGroup
             color="primary"
             size="medium"
             aria-label="Time Span"
             value={timespan}
             exclusive
-            onChange={(_, newValue) => {
-              setTimespan(newValue)
-              loadData(newValue, gainloss, 50)
+            onChange={(a, newValue) => {
+              if (newValue) {
+                setTimespan(newValue)
+                loadData(newValue, gainloss, 50)
+              }
             }}
           >
             <ToggleButton value="week">Weekly</ToggleButton>
@@ -85,8 +87,10 @@ export default function Home() {
             value={gainloss}
             exclusive
             onChange={(_, newValue) => {
-              setGainloss(newValue)
-              loadData(timespan, newValue, 50)
+              if (newValue) {
+                setGainloss(newValue)
+                loadData(timespan, newValue, 50)
+              }
             }}
           >
             <ToggleButton value="positive" color='success'>Biggest Gains</ToggleButton>
