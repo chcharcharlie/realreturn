@@ -83,7 +83,7 @@ export default function Prove() {
 
   const startProve = async function (sessionId) {
     waitForProveCallback(sessionId)
-    window.open(`${process.env.REACT_APP_JOMO_URL}/prove?flowid=105&publicaccountid=${sessionId}`, 'Jomo', 'resizable,height=800,width=600');
+    window.open(`${process.env.REACT_APP_JOMO_URL}/prove?flowid=105&publicaccountid=${sessionId}`, '_blank');
   }
 
   const shareToLeaderboard = async function (sessionId, accountType, account) {
